@@ -1,0 +1,32 @@
+{
+  "name": "todomvc-vue-playwright-e2e",
+  "version": "1.0.0",
+  "description": "End-to-end tests written in Playwright for the Vue-based TodoMVC playground.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --quiet --fix",
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "1.57.0",
+    "@types/node": "^25.0.9",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.0",
+    "typescript": "^5.9.3"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
