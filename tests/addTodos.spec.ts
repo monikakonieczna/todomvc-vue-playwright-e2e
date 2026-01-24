@@ -3,7 +3,8 @@ import { test } from '../src/fixtures/todoFixture'
 test.describe('Add Todos', () => {
   test('Validate new todo was added with correct text', async ({ todoPage }) => {
     await todoPage.addTodo('Buy milk')
-    await todoPage.validateTodoText(1, 'Buy milk')
+    const firstTodo = todoPage.item(0)
+    await firstTodo.expectText('Buy milk')
   })
 
   test('Validate that multiple added todos are available in the list', async ({ todoPage }) => {

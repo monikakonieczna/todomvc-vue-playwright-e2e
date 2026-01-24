@@ -1,5 +1,6 @@
 import { test, expect, Locator, Page } from '@playwright/test'
 import { Filters } from '../types/Filters'
+import { TodoItem } from './ToDoItem'
 
 export class Todo {
   private readonly url: string
@@ -7,9 +8,6 @@ export class Todo {
   private readonly input: Locator
   private readonly todos: Locator
   private readonly filters: Locator
-  private readonly deleteButton: (index: number) => Locator
-  private readonly todoCheckbox: (index: number) => Locator
-  private readonly editButton: (index: number) => Locator
 
   constructor(page: Page, url = 'https://todomvc.com/examples/vue/dist/#/') {
     this.url = url
@@ -17,9 +15,10 @@ export class Todo {
     this.input = page.locator('.new-todo')
     this.todos = page.locator('.todo-list li')
     this.filters = page.locator('.filters')
-    this.todoCheckbox = (index: number) => this.todos.nth(index).locator('.toggle')
-    this.deleteButton = (index: number) => this.todos.nth(index).locator('.destroy')
-    this.editButton = (index: number) => this.todos.nth(index).locator('.destroy')
+  }
+
+  item(index: number): TodoItem {
+    return new TodoItem(this.todos.nth(index))
   }
 
   async openTodosSpace() {
@@ -33,7 +32,7 @@ export class Todo {
   }
 
   async addTodo(todoText: string) {
-    await test.step('Add todo', async () => {
+    await test.step(`Add todo: ${todoText}`, async () => {
       await this.input.fill(todoText)
       await this.input.press('Enter')
     })
@@ -45,41 +44,13 @@ export class Todo {
     }
   }
 
-  todo(index: number) {
-    return this.todos.nth(index)
-  }
-
   viewLabel(index: number) {
     return this.page.locator(`.todo-list li:nth-child(${index}) .view label`)
-  }
-
-  async validateTodoText(index: number, text: string) {
-    await test.step('Validate text in todo', async () => {
-      await expect(this.viewLabel(index)).toContainText(text)
-    })
   }
 
   async validateTodosCount(count: number) {
     await test.step('Validate count of todos in the list', async () => {
       await expect(this.todos).toHaveCount(count)
-    })
-  }
-
-  async toggleTodo(index: number) {
-    await test.step('Toggle todo on the list', async () => {
-      await this.todo(index).check()
-    })
-  }
-
-  async deleteTodo(index: number) {
-    await test.step('Delete todo from the list', async () => {
-      await this.deleteButton(index).click({ force: true })
-    })
-  }
-  async editTodo(index: number, newText: string) {
-    await test.step('Edit chosen todo on the list', async () => {
-      await this.editButton(index).fill(newText)
-      await this.editButton(index).press('Enter')
     })
   }
 
